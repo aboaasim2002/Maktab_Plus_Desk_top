@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================
+   إعدادات RTL والخط العربي
+   ========================================================= */
+html {
+  direction: rtl;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Cairo', 'Noto Naskh Arabic', 'Segoe UI', Tahoma, sans-serif;
+  background-color: #f8fafc; /* slate-50 */
+  color: #111827; /* gray-900 */
+}
+
+input,
+select,
+textarea,
+.tabular-nums {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.statement-page {
+  width: min(100%, 297mm);
+  min-height: 210mm;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.statement-table th,
+.statement-table td {
+  overflow-wrap: anywhere;
+}
+
+.statement-description {
+  text-align: right;
+}
+
+/* =========================================================
+   مكونات مخصصة
+   ========================================================= */
+@layer components {
+  .btn-primary {
+    @apply bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium
+           hover:bg-indigo-700 active:bg-indigo-800 transition-colors
+           focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-gray-700 px-4 py-2 rounded-lg text-sm font-medium
+           border border-gray-300 hover:bg-gray-50 active:bg-gray-100
+           transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400
+           focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium
+           hover:bg-red-700 active:bg-red-800 transition-colors
+           focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-success {
+    @apply bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium
+           hover:bg-green-700 active:bg-green-800 transition-colors
+           focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .input-field {
+    @apply w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm
+           text-gray-900 bg-white placeholder-gray-400
+           focus:outline-none focus:ring-2 focus:ring-indigo-500
+           focus:border-transparent transition-all;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden;
+  }
+
+  .card-header {
+    @apply px-6 py-4 border-b border-gray-100 flex items-center justify-between;
+  }
+
+  .card-body {
+    @apply p-6;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+}
+
+/* =========================================================
+   أنماط الطباعة
+   ========================================================= */
+@media print {
+  /* إخفاء عناصر الواجهة عند الطباعة */
+  .print-hidden,
+  nav,
+  aside,
+  .no-print {
+    display: none !important;
+  }
+
+  /* منطقة الطباعة */
+  .print-area {
+    display: block !important;
+  }
+
+  .report-preview-toolbar,
+  .report-preview-shell > :not(.statement-preview) {
+    display: none !important;
+  }
+
+  .report-preview-shell {
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: white !important;
+  }
+
+  .statement-preview {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .statement-page {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: auto !important;
+    box-shadow: none !important;
+    padding: 6mm !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    break-after: auto;
+    page-break-after: auto;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .statement-page:not(:last-child) {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .statement-preview > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0 !important;
+  }
+
+  .ledger-screen {
+    display: none !important;
+  }
+
+  .statement-print-source {
+    display: block !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .statement-table {
+    font-size: 9pt !important;
+  }
+
+  .statement-description {
+    font-size: 9.5pt !important;
+    line-height: 1.6 !important;
+  }
+
+  body {
+    background: white !important;
+    direction: rtl;
+    font-family: 'Cairo', 'Noto Naskh Arabic', serif;
+    font-size: 12pt;
+    color: #000 !important;
+  }
+
+  /* إعادة ضبط الألوان للطباعة */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* صفحة A4 */
+  @page {
+    size: A4 portrait;
+    margin: 8mm;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+}
+
+/* =========================================================
+   تحريك ناعم للعناصر
+   ========================================================= */
+.fade-in {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
+   تخصيص شريط التمرير
+   ========================================================= */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+/* حقول أرقام الفاتورة تُدخل يدويًا دون أزرار زيادة أو نقصان. */
+input.number-input-manual::-webkit-outer-spin-button,
+input.number-input-manual::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input.number-input-manual[type='number'] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}

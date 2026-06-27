@@ -1,0 +1,9 @@
+{
+  "name": "مكتب بلس",
+  "trial": false,
+  "trialDays": 0,
+  "port": 3192,
+  "dataFolder": "maktab-plus-permanent-data",
+  "runtimeFolder": "maktab-plus-permanent-runtime",
+  "trialFolder": "maktab-plus-permanent-license"
+}

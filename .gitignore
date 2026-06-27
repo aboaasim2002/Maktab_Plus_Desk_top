@@ -1,0 +1,40 @@
+.agents/
+.git.invalid-empty/
+.source-build-git-backup/
+.delivery-git-backup/
+.maktab-plus-git-backup/
+
+# Dependencies and build output
+node_modules/
+.next/
+dist/
+out/
+build/
+coverage/
+*.tsbuildinfo
+
+# Runtime/test data
+.data/
+data/
+*.log
+.packaged-ui-test-data/
+.packaged-test-data/
+.*runtime-test*/
+
+# Desktop deliverables kept locally, not in git
+*.zip
+*.exe
+*.dll
+*.pak
+*.bin
+*.asar
+*.dat
+*.node
+*.webp
+win-unpacked/
+المطور_2-نسخة-دائمة-محدثة/
+
+# Local environment
+.env
+.env.*
+!.env.example
