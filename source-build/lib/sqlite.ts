@@ -181,7 +181,7 @@ function initSchema(db: DatabaseSync): void {
       INSERT INTO users
         (id, arabic_name, username, password_hash, role, permission_mode, is_active)
       VALUES (?, ?, 'admin', ?, 'admin', 'all', 1)
-    `).run('admin-default-user', 'مدير النظام', `${salt}:${hash}`);
+    `).run('admin-default-user', 'مدير النظام', `scrypt$v1$${salt}$${hash}`);
   }
 }
 

@@ -18,29 +18,40 @@ export default function LoginPage() {
     event.preventDefault();
     setError('');
     setLoading(true);
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await response.json();
-    setLoading(false);
-    if (!response.ok) return setError(data.error || 'تعذر تسجيل الدخول');
-    await refresh();
-    const sessionResponse = await fetch('/api/auth/session', { cache: 'no-store' });
-    const sessionData = await sessionResponse.json();
-    const user = sessionData.user;
-    const can = (permission: string) =>
-      user?.role === 'admin' || user?.permission_mode === 'all' || user?.permissions?.includes(permission);
-    const landingPage =
-      can('dashboard.view') ? '/dashboard' :
-      can('invoices.view') ? '/invoices' :
-      can('clients.view') ? '/clients' :
-      can('operations.view') ? '/contracts' :
-      can('reports.view') ? '/reports' :
-      can('settings.view') ? '/settings' :
-      '/profile';
-    router.replace(landingPage);
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        setError(data.error || 'تعذر تسجيل الدخول');
+        return;
+      }
+
+      await refresh();
+      const sessionResponse = await fetch('/api/auth/session', { cache: 'no-store' });
+      const sessionData = await sessionResponse.json().catch(() => ({}));
+      const user = sessionData.user;
+      const can = (permission: string) =>
+        user?.role === 'admin' || user?.permission_mode === 'all' || user?.permissions?.includes(permission);
+      const landingPage =
+        can('dashboard.view') ? '/dashboard' :
+        can('invoices.view') ? '/invoices' :
+        can('clients.view') ? '/clients' :
+        can('operations.view') ? '/contracts' :
+        can('reports.view') ? '/reports' :
+        can('settings.view') ? '/settings' :
+        '/profile';
+      router.replace(landingPage);
+    } catch {
+      setError('تعذر الاتصال بخدمة تسجيل الدخول. أغلق البرنامج وافتحه مرة أخرى.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -78,7 +89,7 @@ export default function LoginPage() {
             </span>
           </label>
           <button disabled={loading} className="btn-primary w-full py-3 text-base">
-            {loading ? 'جارٍ تسجيل الدخول...' : 'تسجيل الدخول'}
+            {loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
           </button>
         </form>
       </div>
