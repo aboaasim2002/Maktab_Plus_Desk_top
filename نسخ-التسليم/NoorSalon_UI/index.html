@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>NoorSalon - نموذج واجهة إدارة الصالون</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="login-preview" id="loginPreview">
+      <section class="login-brand" aria-label="هوية NoorSalon">
+        <img src="./assets/noorsalon-mark.png" alt="علامة NoorSalon" class="login-mark" />
+        <div>
+          <p class="eyebrow">NoorSalon</p>
+          <h1>إدارة الصالون من شاشة واحدة</h1>
+          <p>
+            لوحة عربية منظمة لمتابعة إيرادات الحلاقين، السحوبات، الفروع، الموردين، والفواتير اليومية.
+          </p>
+        </div>
+      </section>
+
+      <form class="login-form" id="loginForm">
+        <div class="form-heading">
+          <span>تسجيل الدخول</span>
+          <strong>مرحبًا بعودتك</strong>
+        </div>
+        <label>
+          البريد الإلكتروني
+          <input type="email" value="owner@noorsalon.sa" autocomplete="email" />
+        </label>
+        <label>
+          كلمة المرور
+          <input type="password" value="123456789" autocomplete="current-password" />
+        </label>
+        <button class="primary-action" type="submit">دخول إلى لوحة الإدارة</button>
+        <p class="muted centered">النموذج الحالي مخصص لمراجعة تجربة الاستخدام فقط.</p>
+      </form>
+    </div>
+
+    <div class="app-shell is-hidden" id="appShell">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand-block">
+          <img src="./assets/noorsalon-mark.png" alt="" class="brand-mark" />
+          <div>
+            <strong>NoorSalon</strong>
+            <span>صالون النور - الفرع الرئيسي</span>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="التنقل الرئيسي">
+          <button class="nav-item active" data-view="dashboard"><span class="nav-symbol">د</span>لوحة التحكم</button>
+          <button class="nav-item" data-view="entries"><span class="nav-symbol">ي</span>الإدخالات اليومية</button>
+          <button class="nav-item" data-view="withdrawals"><span class="nav-symbol">س</span>السحوبات</button>
+          <button class="nav-item" data-view="barbers"><span class="nav-symbol">ح</span>الحلاقون</button>
+          <button class="nav-item" data-view="suppliers"><span class="nav-symbol">م</span>الموردون</button>
+          <button class="nav-item" data-view="reports"><span class="nav-symbol">ت</span>التقارير</button>
+          <button class="nav-item" data-view="settings"><span class="nav-symbol">ض</span>الإعدادات</button>
+        </nav>
+
+        <div class="user-block">
+          <div>
+            <strong>أحمد المالك</strong>
+            <span>مالك النظام</span>
+          </div>
+          <button class="ghost-button" id="logoutButton">خروج</button>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <button class="mobile-menu" id="menuButton" aria-label="فتح القائمة">القائمة</button>
+          <div>
+            <p class="eyebrow">اليوم: 28 يونيو 2026</p>
+            <h2 id="pageTitle">لوحة التحكم</h2>
+          </div>
+          <div class="top-actions">
+            <button class="secondary-action" data-view-shortcut="invoiceForm">إضافة فاتورة</button>
+            <button class="primary-action compact" data-view-shortcut="entryForm">إضافة إدخال</button>
+          </div>
+        </header>
+
+        <section class="filter-bar" aria-label="فلاتر عامة">
+          <label>
+            الفرع
+            <select>
+              <option>كل الفروع</option>
+              <option>الفرع الرئيسي</option>
+              <option>فرع التحلية</option>
+            </select>
+          </label>
+          <label>
+            الفترة
+            <select>
+              <option>هذا الشهر</option>
+              <option>اليوم</option>
+              <option>هذا العام</option>
+              <option>نطاق مخصص</option>
+            </select>
+          </label>
+          <label>
+            من
+            <input type="date" value="2026-06-01" />
+          </label>
+          <label>
+            إلى
+            <input type="date" value="2026-06-28" />
+          </label>
+        </section>
+
+        <section class="view active" id="dashboard" data-title="لوحة التحكم">
+          <div class="metrics-grid">
+            <article class="metric-card revenue">
+              <span>إجمالي الإيراد</span>
+              <strong>86,450 ر.س</strong>
+              <small>+12% عن الشهر السابق</small>
+            </article>
+            <article class="metric-card expense">
+              <span>إجمالي السحوبات</span>
+              <strong>18,900 ر.س</strong>
+              <small>آخر سحب: 750 ر.س</small>
+            </article>
+            <article class="metric-card balance">
+              <span>صافي الرصيد</span>
+              <strong>67,550 ر.س</strong>
+              <small>بعد خصم السحوبات</small>
+            </article>
+            <article class="metric-card suppliers-due">
+              <span>مستحقات الموردين</span>
+              <strong>23,480 ر.س</strong>
+              <small>3 موردين لديهم رصيد</small>
+            </article>
+          </div>
+
+          <div class="dashboard-layout">
+            <section class="panel spotlight-panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">بطاقة الموظف</p>
+                  <h3>متابعة أداء الحلاق</h3>
+                </div>
+                <select class="inline-select">
+                  <option>محمد سالم</option>
+                  <option>عبدالله فهد</option>
+                  <option>رامي خالد</option>
+                </select>
+              </div>
+              <div class="spotlight">
+                <div class="avatar">م</div>
+                <div>
+                  <strong>محمد سالم</strong>
+                  <span>الفرع الرئيسي</span>
+                </div>
+              </div>
+              <div class="mini-stats">
+                <div><span>كل الإيرادات</span><strong>142,200 ر.س</strong></div>
+                <div><span>الفترة الحالية</span><strong>21,650 ر.س</strong></div>
+                <div><span>السحوبات</span><strong>4,100 ر.س</strong></div>
+                <div><span>الصافي</span><strong>17,550 ر.س</strong></div>
+              </div>
+              <div class="bar-chart" aria-label="رسم بياني لإيرادات الموظف">
+                <span style="height:44%"></span>
+                <span style="height:66%"></span>
+                <span style="height:35%"></span>
+                <span style="height:82%"></span>
+                <span style="height:58%"></span>
+                <span style="height:74%"></span>
+                <span style="height:49%"></span>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">آخر العمليات</p>
+                  <h3>آخر 10 إدخالات</h3>
+                </div>
+                <button class="secondary-action small" data-view-shortcut="entries">عرض الكل</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>الموظف</th>
+                      <th>الفرع</th>
+                      <th>المبلغ</th>
+                      <th>التاريخ</th>
+                      <th>ملاحظة</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>محمد سالم</td><td>الرئيسي</td><td>1,250 ر.س</td><td>28 يونيو</td><td>خدمات VIP</td></tr>
+                    <tr><td>رامي خالد</td><td>التحلية</td><td>920 ر.س</td><td>28 يونيو</td><td>حلاقة ولحية</td></tr>
+                    <tr><td>عبدالله فهد</td><td>الرئيسي</td><td>1,480 ر.س</td><td>27 يونيو</td><td>وردية مسائية</td></tr>
+                    <tr><td>محمد سالم</td><td>الرئيسي</td><td>780 ر.س</td><td>27 يونيو</td><td>بدون ملاحظات</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="entries" data-title="الإدخالات اليومية">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">إيرادات الحلاقين</p>
+              <h3>الإدخالات اليومية</h3>
+            </div>
+            <button class="primary-action compact" data-view-shortcut="entryForm">إضافة إدخال جديد</button>
+          </div>
+          <div class="panel">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>الموظف</th><th>الفرع</th><th>المبلغ</th><th>التاريخ</th><th>أدخل بواسطة</th><th>الحالة</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>محمد سالم</td><td>الرئيسي</td><td>1,250 ر.س</td><td>2026-06-28</td><td>أحمد المالك</td><td><span class="status success">مؤكد</span></td></tr>
+                  <tr><td>رامي خالد</td><td>التحلية</td><td>920 ر.س</td><td>2026-06-28</td><td>مدير الفرع</td><td><span class="status success">مؤكد</span></td></tr>
+                  <tr><td>عبدالله فهد</td><td>الرئيسي</td><td>1,480 ر.س</td><td>2026-06-27</td><td>أحمد المالك</td><td><span class="status muted-status">قيد المراجعة</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="entryForm" data-title="إضافة إدخال يومي">
+          <form class="form-grid panel">
+            <label>الموظف<select><option>محمد سالم</option><option>عبدالله فهد</option></select></label>
+            <label>الفرع<select><option>الفرع الرئيسي</option><option>فرع التحلية</option></select></label>
+            <label>المبلغ<input type="number" value="1250" /></label>
+            <label>التاريخ<input type="date" value="2026-06-28" /></label>
+            <label class="full-span">ملاحظة<textarea>خدمات حلاقة ولحية وباقة عناية.</textarea></label>
+            <div class="form-actions full-span">
+              <button class="secondary-action" type="button" data-view-shortcut="entries">إلغاء</button>
+              <button class="primary-action" type="button">حفظ الإدخال</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="view" id="withdrawals" data-title="السحوبات">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">إدارة الرصيد</p>
+              <h3>سحوبات الموظفين</h3>
+            </div>
+            <button class="primary-action compact">إضافة سحب</button>
+          </div>
+          <div class="split-layout">
+            <form class="panel form-stack">
+              <label>الموظف<select><option>محمد سالم - الرصيد 17,550 ر.س</option></select></label>
+              <label>المبلغ<input type="number" value="750" /></label>
+              <label>التاريخ<input type="date" value="2026-06-28" /></label>
+              <label>ملاحظة<textarea>سحب نقدي من رصيد الفترة.</textarea></label>
+              <button class="primary-action" type="button">تسجيل السحب</button>
+            </form>
+            <div class="panel balance-preview">
+              <span>الرصيد قبل السحب</span><strong>17,550 ر.س</strong>
+              <span>الرصيد بعد السحب</span><strong class="positive">16,800 ر.س</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="barbers" data-title="الحلاقون">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">الفريق</p>
+              <h3>إدارة الحلاقين</h3>
+            </div>
+            <button class="primary-action compact">إضافة موظف</button>
+          </div>
+          <div class="people-grid">
+            <article class="person-card"><div class="avatar">م</div><strong>محمد سالم</strong><span>الرئيسي</span><small>إيراد الشهر: 21,650 ر.س</small></article>
+            <article class="person-card"><div class="avatar blue">ع</div><strong>عبدالله فهد</strong><span>الرئيسي</span><small>إيراد الشهر: 18,900 ر.س</small></article>
+            <article class="person-card"><div class="avatar amber">ر</div><strong>رامي خالد</strong><span>التحلية</span><small>إيراد الشهر: 16,300 ر.س</small></article>
+          </div>
+        </section>
+
+        <section class="view" id="suppliers" data-title="الموردون">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">المشتريات والمدفوعات</p>
+              <h3>الموردون</h3>
+            </div>
+            <button class="primary-action compact">إضافة مورد</button>
+          </div>
+          <div class="panel">
+            <div class="table-tools">
+              <input type="search" placeholder="ابحث باسم المورد أو رقم الجوال" />
+              <select><option>كل الأرصدة</option><option>لديه مستحقات</option><option>مسدد بالكامل</option></select>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>الاسم</th><th>المسؤول</th><th>الجوال</th><th>العنوان</th><th>الرصيد المستحق</th><th>إجراءات</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>شركة أناقة للتجهيزات</td><td>سامي العتيبي</td><td>055 900 1122</td><td>جدة - الروضة</td><td class="danger-text">12,800 ر.س</td>
+                    <td><button class="secondary-action small" data-view-shortcut="supplierProfile">عرض الحساب</button></td>
+                  </tr>
+                  <tr>
+                    <td>نور للعناية الرجالية</td><td>نواف الحربي</td><td>050 444 2200</td><td>الرياض - العليا</td><td class="danger-text">7,450 ر.س</td>
+                    <td><button class="secondary-action small" data-view-shortcut="supplierProfile">عرض الحساب</button></td>
+                  </tr>
+                  <tr>
+                    <td>المحترف للأدوات</td><td>إبراهيم فلاته</td><td>056 330 4411</td><td>مكة - العزيزية</td><td>0 ر.س</td>
+                    <td><button class="secondary-action small" data-view-shortcut="supplierProfile">عرض الحساب</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="supplierProfile" data-title="حساب المورد">
+          <div class="supplier-header">
+            <div>
+              <p class="eyebrow">حساب مورد</p>
+              <h3>شركة أناقة للتجهيزات</h3>
+              <p>المسؤول: سامي العتيبي | الجوال: 055 900 1122 | جدة - الروضة</p>
+            </div>
+            <div class="supplier-balance">
+              <span>الرصيد المستحق</span>
+              <strong>12,800 ر.س</strong>
+            </div>
+          </div>
+
+          <div class="summary-strip">
+            <div><span>إجمالي الفواتير</span><strong>34,300 ر.س</strong></div>
+            <div><span>إجمالي المدفوع</span><strong>21,500 ر.س</strong></div>
+            <div><span>المتبقي</span><strong class="danger-text">12,800 ر.س</strong></div>
+          </div>
+
+          <div class="tabs" role="tablist">
+            <button class="tab-button active" data-tab="invoicesTab">الفواتير</button>
+            <button class="tab-button" data-tab="vouchersTab">سندات القبض</button>
+          </div>
+
+          <div class="tab-panel active" id="invoicesTab">
+            <div class="panel">
+              <div class="panel-header">
+                <h3>فواتير المورد</h3>
+                <button class="primary-action compact" data-view-shortcut="invoiceForm">إضافة فاتورة</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>رقم الفاتورة</th><th>التاريخ</th><th>الوصف</th><th>الفرع</th><th>المبلغ</th></tr></thead>
+                  <tbody>
+                    <tr><td>INV-2217</td><td>2026-06-22</td><td>كراسي ومرايا</td><td>الرئيسي</td><td>18,500 ر.س</td></tr>
+                    <tr><td>INV-2240</td><td>2026-06-26</td><td>أدوات تعقيم</td><td>التحلية</td><td>15,800 ر.س</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="vouchersTab">
+            <div class="panel">
+              <div class="panel-header">
+                <h3>سندات القبض</h3>
+                <button class="primary-action compact" data-view-shortcut="voucherForm">إضافة سند قبض</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>رقم السند</th><th>التاريخ</th><th>المبلغ</th><th>طريقة الدفع</th><th>رقم الحوالة</th><th>ملاحظة</th></tr></thead>
+                  <tbody>
+                    <tr><td>PV-00001</td><td>2026-06-24</td><td>10,000 ر.س</td><td>حوالة بنكية</td><td>TR-5549</td><td>دفعة أولى</td></tr>
+                    <tr><td>PV-00002</td><td>2026-06-27</td><td>11,500 ر.س</td><td>نقدي</td><td>-</td><td>دفعة من الصندوق</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="invoiceForm" data-title="إضافة فاتورة مشتريات">
+          <form class="form-grid panel">
+            <label>رقم الفاتورة<input value="INV-2251" /></label>
+            <label>تاريخ الفاتورة<input type="date" value="2026-06-28" /></label>
+            <label>المبلغ<input type="number" value="6800" /></label>
+            <label>الفرع<select><option>الفرع الرئيسي</option><option>فرع التحلية</option></select></label>
+            <label class="full-span">الوصف<textarea>منتجات عناية ومستلزمات تشغيل شهر يونيو.</textarea></label>
+            <div class="form-actions full-span">
+              <button class="secondary-action" type="button" data-view-shortcut="supplierProfile">رجوع للحساب</button>
+              <button class="primary-action" type="button">حفظ الفاتورة</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="view" id="voucherForm" data-title="إضافة سند قبض">
+          <form class="form-grid panel">
+            <label>رقم السند<input value="PV-00003" readonly /></label>
+            <label>تاريخ السند<input type="date" value="2026-06-28" /></label>
+            <label>المبلغ<input type="number" value="5000" /></label>
+            <fieldset>
+              <legend>طريقة الدفع</legend>
+              <label class="radio-line"><input type="radio" name="payment" value="cash" checked /> نقدي</label>
+              <label class="radio-line"><input type="radio" name="payment" value="bank" /> حوالة بنكية</label>
+            </fieldset>
+            <label class="bank-field is-hidden" id="bankReference">رقم الحوالة البنكية<input value="TR-8892" /></label>
+            <label class="full-span">ملاحظة<textarea>دفعة من مستحقات فاتورة INV-2251.</textarea></label>
+            <div class="form-actions full-span">
+              <button class="secondary-action" type="button" data-view-shortcut="supplierProfile">رجوع للحساب</button>
+              <button class="primary-action" type="button">حفظ السند</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="view" id="reports" data-title="التقارير">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">تحليل ومراجعة</p>
+              <h3>التقارير</h3>
+            </div>
+            <button class="secondary-action compact">تصدير PDF</button>
+          </div>
+          <div class="report-grid">
+            <section class="panel">
+              <h3>إيرادات الفروع</h3>
+              <div class="horizontal-bars">
+                <div><span>الرئيسي</span><b style="width:82%"></b><strong>48,200</strong></div>
+                <div><span>التحلية</span><b style="width:61%"></b><strong>31,450</strong></div>
+                <div><span>النسيم</span><b style="width:38%"></b><strong>19,900</strong></div>
+              </div>
+            </section>
+            <section class="panel">
+              <h3>تقرير الموردين</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>المورد</th><th>الفواتير</th><th>المدفوع</th><th>الرصيد</th></tr></thead>
+                  <tbody>
+                    <tr><td>شركة أناقة للتجهيزات</td><td>34,300</td><td>21,500</td><td class="danger-text">12,800</td></tr>
+                    <tr><td>نور للعناية الرجالية</td><td>11,950</td><td>4,500</td><td class="danger-text">7,450</td></tr>
+                    <tr><td>المحترف للأدوات</td><td>9,200</td><td>9,200</td><td>0</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="settings" data-title="الإعدادات">
+          <div class="panel settings-panel">
+            <h3>إعدادات النظام</h3>
+            <form class="form-grid">
+              <label>اسم الصالون<input value="صالون النور" /></label>
+              <label>العملة<input value="ر.س" /></label>
+              <label>المدينة<input value="جدة" /></label>
+              <label>لغة الواجهة<input value="العربية" readonly /></label>
+              <div class="form-actions full-span">
+                <button class="primary-action" type="button">حفظ الإعدادات</button>
+              </div>
+            </form>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

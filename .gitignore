@@ -3,6 +3,7 @@
 .source-build-git-backup/
 .delivery-git-backup/
 .maktab-plus-git-backup/
+نسخ-التسليم/Maktab_Plus_GitHub/
 
 # Dependencies and build output
 node_modules/
