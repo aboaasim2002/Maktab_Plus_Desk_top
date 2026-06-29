@@ -30,6 +30,7 @@ let mainWindow  = null;
 let nextServer  = null;
 let isQuitting = false;
 let closePromptOpen = false;
+let shutdownStarted = false;
 
 function clearSavedSessions() {
   const dbPath = path.join(SHARED_DATA_PATH, 'binafif.db');
@@ -252,8 +253,7 @@ async function confirmClose() {
     }
 
     clearSavedSessions();
-    isQuitting = true;
-    app.quit();
+    await shutdownAndQuit();
   } finally {
     closePromptOpen = false;
   }
@@ -346,37 +346,91 @@ function startNextServer() {
     },
     cwd:   serverCwd,
     stdio: 'pipe',
+    windowsHide: true,
   });
+  const server = nextServer;
 
-  nextServer.stdout?.on('data', (d) =>
+  server.stdout?.on('data', (d) =>
     console.log('[next]', d.toString().trim())
   );
-  nextServer.stderr?.on('data', (d) =>
+  server.stderr?.on('data', (d) =>
     console.error('[next]', d.toString().trim())
   );
-  nextServer.on('error', (err) =>
+  server.on('error', (err) =>
     console.error('[next] spawn error:', err)
   );
+  server.on('exit', () => {
+    if (nextServer === server) nextServer = null;
+  });
 }
 
-function stopNextServer() {
-  if (!nextServer) return Promise.resolve();
+function killProcessTree(pid) {
+  if (!pid) return Promise.resolve();
+
+  if (process.platform === 'win32') {
+    return new Promise((resolve) => {
+      const killer = spawn('taskkill', ['/pid', String(pid), '/t', '/f'], {
+        stdio: 'ignore',
+        windowsHide: true,
+      });
+      killer.once('error', resolve);
+      killer.once('close', resolve);
+    });
+  }
+
+  try {
+    process.kill(pid, 'SIGKILL');
+  } catch {}
+  return Promise.resolve();
+}
+
+async function stopNextServer() {
+  if (!nextServer) return;
   const server = nextServer;
+  const pid = server.pid;
   nextServer = null;
-  return new Promise((resolve) => {
-    let finished = false;
+
+  let exited = server.exitCode !== null || server.signalCode !== null;
+  const exitedPromise = new Promise((resolve) => {
+    if (exited) return resolve();
     const finish = () => {
-      if (finished) return;
-      finished = true;
+      exited = true;
       resolve();
     };
     server.once('exit', finish);
-    server.kill('SIGTERM');
-    setTimeout(() => {
-      if (!finished) server.kill('SIGKILL');
-      finish();
-    }, 3000);
+    server.once('error', finish);
   });
+
+  try {
+    server.kill('SIGTERM');
+  } catch {}
+
+  await Promise.race([
+    exitedPromise,
+    new Promise((resolve) => setTimeout(resolve, 1500)),
+  ]);
+
+  if (!exited) {
+    await killProcessTree(pid);
+    await Promise.race([
+      exitedPromise,
+      new Promise((resolve) => setTimeout(resolve, 500)),
+    ]);
+  }
+}
+
+async function shutdownAndQuit(exitCode = 0) {
+  if (shutdownStarted) return;
+  shutdownStarted = true;
+  isQuitting = true;
+
+  try {
+    await stopNextServer();
+  } catch (error) {
+    console.error('Failed to stop Next.js server:', error);
+  } finally {
+    app.exit(exitCode);
+  }
 }
 
 function validateDatabase(filePath) {
@@ -630,7 +684,7 @@ app.whenReady().then(async () => {
     const trialStatus = checkTrialStatus();
     if (!trialStatus.valid) {
       await showTrialExpiredMessage();
-      app.quit();
+      await shutdownAndQuit();
       return;
     }
   }
@@ -647,7 +701,7 @@ app.whenReady().then(async () => {
     await waitForServer(`http://localhost:${PORT}`);
   } catch (err) {
     console.error('فشل الاتصال بالسيرفر:', err);
-    app.quit();
+    await shutdownAndQuit(1);
     return;
   }
 
@@ -659,11 +713,13 @@ app.whenReady().then(async () => {
 });
 
 app.on('window-all-closed', () => {
-  if (nextServer) {
-    nextServer.kill('SIGTERM');
-    nextServer = null;
-  }
-  if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') void shutdownAndQuit();
+});
+
+app.on('before-quit', (event) => {
+  if (shutdownStarted || !nextServer) return;
+  event.preventDefault();
+  void shutdownAndQuit();
 });
 
 // ─── IPC: نسخ احتياطي لقاعدة البيانات ──────────────────────
